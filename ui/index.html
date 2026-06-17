@@ -1,0 +1,1299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Document Intelligence</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #f1f5f9;
+    --surface: #ffffff;
+    --border: #e2e8f0;
+    --border-light: #f1f5f9;
+    --text: #0f172a;
+    --text-secondary: #475569;
+    --text-muted: #94a3b8;
+    --primary: #1d4ed8;
+    --primary-hover: #1e40af;
+    --primary-light: #eff6ff;
+    --shadow-sm: 0 1px 2px rgba(15, 23, 42, 0.05);
+    --shadow: 0 1px 3px rgba(15, 23, 42, 0.08), 0 1px 2px rgba(15, 23, 42, 0.04);
+    --shadow-md: 0 4px 6px -1px rgba(15, 23, 42, 0.07), 0 2px 4px -2px rgba(15, 23, 42, 0.05);
+    --radius: 10px;
+    --radius-sm: 6px;
+    --font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    --invoice: #2563eb;
+    --invoice-bg: #eff6ff;
+    --resume: #059669;
+    --resume-bg: #ecfdf5;
+    --utility: #d97706;
+    --utility-bg: #fffbeb;
+    --other: #64748b;
+    --other-bg: #f8fafc;
+    --unclassifiable: #dc2626;
+    --unclassifiable-bg: #fef2f2;
+  }
+
+  body {
+    font-family: var(--font);
+    font-size: 14px;
+    line-height: 1.5;
+    color: var(--text);
+    background: var(--bg);
+    min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ── Header ── */
+  .header {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 0 32px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: var(--shadow-sm);
+  }
+
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .brand-icon {
+    width: 32px;
+    height: 32px;
+    background: var(--primary);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    flex-shrink: 0;
+  }
+
+  .brand-text h1 {
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    line-height: 1.2;
+  }
+
+  .brand-text p {
+    font-size: 12px;
+    color: var(--text-muted);
+    line-height: 1.2;
+  }
+
+  .header-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  /* ── Layout ── */
+  .page {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 28px 32px 48px;
+  }
+
+  /* ── Controls bar ── */
+  .controls {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 16px 20px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-bottom: 24px;
+    box-shadow: var(--shadow-sm);
+  }
+
+  .controls-label {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text-secondary);
+    white-space: nowrap;
+  }
+
+  .folder-input-wrap {
+    flex: 1;
+    min-width: 200px;
+    position: relative;
+  }
+
+  .folder-input-wrap svg {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-muted);
+    pointer-events: none;
+  }
+
+  input[type="text"] {
+    width: 100%;
+    font-family: var(--font);
+    font-size: 13px;
+    padding: 9px 12px 9px 36px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    background: var(--bg);
+    color: var(--text);
+    outline: none;
+    transition: border-color 0.15s, box-shadow 0.15s;
+  }
+
+  input[type="text"]:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(29, 78, 216, 0.12);
+    background: var(--surface);
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    font-family: var(--font);
+    font-size: 13px;
+    font-weight: 500;
+    padding: 9px 16px;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border);
+    background: var(--surface);
+    color: var(--text);
+    cursor: pointer;
+    transition: background 0.15s, border-color 0.15s, box-shadow 0.15s;
+    white-space: nowrap;
+  }
+
+  .btn:hover:not(:disabled) { background: var(--bg); }
+  .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+  .btn-primary {
+    background: var(--primary);
+    color: #fff;
+    border-color: var(--primary);
+  }
+
+  .btn-primary:hover:not(:disabled) {
+    background: var(--primary-hover);
+    border-color: var(--primary-hover);
+  }
+
+  .btn-ghost {
+    background: transparent;
+    border-color: transparent;
+    color: var(--text-secondary);
+  }
+
+  .btn-ghost:hover:not(:disabled) {
+    background: var(--bg);
+    color: var(--text);
+  }
+
+  /* ── Progress ── */
+  .progress-panel {
+    display: none;
+    background: var(--primary-light);
+    border: 1px solid #bfdbfe;
+    border-radius: var(--radius);
+    padding: 16px 20px;
+    margin-bottom: 24px;
+  }
+
+  .progress-panel.active { display: block; }
+
+  .progress-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+
+  .progress-title {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--primary);
+  }
+
+  .progress-count {
+    font-size: 12px;
+    color: var(--text-secondary);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .progress-track {
+    height: 6px;
+    background: #dbeafe;
+    border-radius: 99px;
+    overflow: hidden;
+    margin-bottom: 8px;
+  }
+
+  .progress-fill {
+    height: 100%;
+    background: var(--primary);
+    border-radius: 99px;
+    transition: width 0.35s ease;
+    width: 0%;
+  }
+
+  .progress-file {
+    font-size: 12px;
+    color: var(--text-secondary);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  /* ── Overview ── */
+  .overview {
+    display: none;
+    margin-bottom: 24px;
+  }
+
+  .overview.visible { display: block; }
+
+  .overview-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+
+  .stat-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 16px 18px;
+    box-shadow: var(--shadow-sm);
+    cursor: pointer;
+    transition: border-color 0.15s, box-shadow 0.15s, transform 0.1s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .stat-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: var(--card-accent, var(--border));
+  }
+
+  .stat-card:hover {
+    border-color: #cbd5e1;
+    box-shadow: var(--shadow);
+  }
+
+  .stat-card.active {
+    border-color: var(--card-accent, var(--primary));
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--card-accent, var(--primary)) 15%, transparent);
+  }
+
+  .stat-card .count {
+    font-size: 28px;
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    line-height: 1;
+    margin-bottom: 4px;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .stat-card .label {
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--text-secondary);
+  }
+
+  .stat-card .pct {
+    font-size: 11px;
+    color: var(--text-muted);
+    margin-top: 2px;
+  }
+
+  .distribution-bar {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 14px 18px;
+    box-shadow: var(--shadow-sm);
+  }
+
+  .distribution-bar h3 {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    margin-bottom: 10px;
+  }
+
+  .bar-track {
+    display: flex;
+    height: 8px;
+    border-radius: 99px;
+    overflow: hidden;
+    gap: 2px;
+  }
+
+  .bar-segment {
+    height: 100%;
+    transition: width 0.5s ease;
+    min-width: 0;
+  }
+
+  .bar-legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+    margin-top: 10px;
+  }
+
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    color: var(--text-secondary);
+  }
+
+  .legend-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  /* ── Main panel ── */
+  .panel {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-sm);
+    overflow: hidden;
+  }
+
+  .panel-toolbar {
+    padding: 14px 20px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  .panel-title {
+    font-size: 14px;
+    font-weight: 600;
+    margin-right: auto;
+  }
+
+  .search-wrap {
+    position: relative;
+    width: 220px;
+  }
+
+  .search-wrap svg {
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-muted);
+    pointer-events: none;
+  }
+
+  .search-wrap input {
+    padding-left: 32px;
+    padding-top: 7px;
+    padding-bottom: 7px;
+    font-size: 13px;
+  }
+
+  .filter-pills {
+    display: flex;
+    gap: 4px;
+    flex-wrap: wrap;
+  }
+
+  .pill {
+    font-size: 12px;
+    font-weight: 500;
+    padding: 5px 11px;
+    border-radius: 99px;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+
+  .pill:hover { background: var(--bg); color: var(--text); }
+  .pill.active { background: var(--text); color: #fff; border-color: var(--text); }
+
+  /* ── Table ── */
+  .table-container { overflow-x: auto; }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+
+  thead th {
+    text-align: left;
+    padding: 10px 20px;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--text-muted);
+    background: var(--bg);
+    border-bottom: 1px solid var(--border);
+    white-space: nowrap;
+  }
+
+  tbody tr {
+    border-bottom: 1px solid var(--border-light);
+    cursor: pointer;
+    transition: background 0.1s;
+  }
+
+  tbody tr:last-child { border-bottom: none; }
+  tbody tr:hover { background: #f8fafc; }
+  tbody tr.expanded { background: #f8fafc; }
+
+  tbody td {
+    padding: 12px 20px;
+    vertical-align: middle;
+  }
+
+  .file-cell {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 180px;
+  }
+
+  .file-icon {
+    width: 32px;
+    height: 32px;
+    background: #fef2f2;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    color: #dc2626;
+  }
+
+  .file-name {
+    font-weight: 500;
+    color: var(--text);
+    word-break: break-all;
+  }
+
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 12px;
+    font-weight: 500;
+    padding: 3px 10px;
+    border-radius: 99px;
+    white-space: nowrap;
+  }
+
+  .badge-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  .badge-invoice { background: var(--invoice-bg); color: var(--invoice); }
+  .badge-invoice .badge-dot { background: var(--invoice); }
+  .badge-resume { background: var(--resume-bg); color: var(--resume); }
+  .badge-resume .badge-dot { background: var(--resume); }
+  .badge-utility { background: var(--utility-bg); color: var(--utility); }
+  .badge-utility .badge-dot { background: var(--utility); }
+  .badge-other { background: var(--other-bg); color: var(--other); }
+  .badge-other .badge-dot { background: var(--other); }
+  .badge-unclassifiable { background: var(--unclassifiable-bg); color: var(--unclassifiable); }
+  .badge-unclassifiable .badge-dot { background: var(--unclassifiable); }
+
+  .field-value {
+    color: var(--text-secondary);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .field-value.empty { color: var(--text-muted); font-style: italic; }
+
+  .expand-icon {
+    color: var(--text-muted);
+    transition: transform 0.2s;
+    flex-shrink: 0;
+  }
+
+  tr.expanded .expand-icon { transform: rotate(180deg); }
+
+  .detail-row td {
+    padding: 0;
+    background: #f8fafc;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .detail-content {
+    padding: 16px 20px 16px 62px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 12px 24px;
+  }
+
+  .detail-item label {
+    display: block;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--text-muted);
+    margin-bottom: 3px;
+  }
+
+  .detail-item span {
+    font-size: 13px;
+    color: var(--text);
+    word-break: break-word;
+  }
+
+  /* ── Empty state ── */
+  .empty-state {
+    text-align: center;
+    padding: 64px 32px;
+  }
+
+  .empty-icon {
+    width: 56px;
+    height: 56px;
+    background: var(--bg);
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 16px;
+    color: var(--text-muted);
+  }
+
+  .empty-state h2 {
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 6px;
+  }
+
+  .empty-state p {
+    font-size: 13px;
+    color: var(--text-secondary);
+    max-width: 360px;
+    margin: 0 auto 20px;
+    line-height: 1.6;
+  }
+
+  /* ── Upload section ── */
+  .upload-section {
+    margin-top: 24px;
+  }
+
+  .upload-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px 24px;
+    box-shadow: var(--shadow-sm);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 32px;
+    align-items: start;
+  }
+
+  .upload-info,
+  .upload-col {
+    min-width: 0;
+  }
+
+  .upload-col {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .upload-info h3 {
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 6px;
+  }
+
+  .upload-info p {
+    font-size: 13px;
+    color: var(--text-secondary);
+    line-height: 1.6;
+    margin-bottom: 12px;
+  }
+
+  .upload-info ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .upload-info li {
+    font-size: 12px;
+    color: var(--text-secondary);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .upload-info li::before {
+    content: '';
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: var(--primary);
+    flex-shrink: 0;
+  }
+
+  .dropzone {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    box-sizing: border-box;
+    border: 2px dashed var(--border);
+    border-radius: var(--radius);
+    padding: 32px 20px;
+    text-align: center;
+    cursor: pointer;
+    transition: border-color 0.2s, background 0.2s;
+    user-select: none;
+  }
+
+  .dropzone:hover, .dropzone.drag-over {
+    border-color: var(--primary);
+    background: var(--primary-light);
+  }
+
+  .dropzone-icon {
+    width: 40px;
+    height: 40px;
+    background: var(--bg);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 12px;
+    color: var(--text-muted);
+    transition: background 0.2s, color 0.2s;
+  }
+
+  .dropzone:hover .dropzone-icon, .dropzone.drag-over .dropzone-icon {
+    background: #dbeafe;
+    color: var(--primary);
+  }
+
+  .dropzone p {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text);
+    margin-bottom: 4px;
+  }
+
+  .dropzone span {
+    font-size: 12px;
+    color: var(--text-muted);
+  }
+
+  .dropzone input { display: none; }
+
+  /* ── Single result card ── */
+  .single-result {
+    display: none;
+    width: 100%;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    overflow: hidden;
+    text-align: left;
+  }
+
+  .single-result.visible { display: block; }
+
+  .single-result-header {
+    padding: 12px 16px;
+    background: var(--bg);
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+  }
+
+  .single-result-header .fname {
+    font-size: 13px;
+    font-weight: 500;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .single-result-body {
+    padding: 14px 16px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 12px;
+  }
+
+  .classifying {
+    font-size: 13px;
+    color: var(--text-muted);
+    padding: 12px 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .spinner {
+    width: 14px;
+    height: 14px;
+    border: 2px solid var(--border);
+    border-top-color: var(--primary);
+    border-radius: 50%;
+    animation: spin 0.7s linear infinite;
+  }
+
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* ── Alerts ── */
+  .alert {
+    font-size: 13px;
+    padding: 10px 14px;
+    border-radius: var(--radius-sm);
+    margin-top: 10px;
+    display: none;
+  }
+
+  .alert.visible { display: block; }
+  .alert-error { background: var(--unclassifiable-bg); color: var(--unclassifiable); border: 1px solid #fecaca; }
+  .alert-success { background: var(--resume-bg); color: var(--resume); border: 1px solid #a7f3d0; }
+
+  /* ── Responsive ── */
+  @media (max-width: 1024px) {
+    .overview-grid { grid-template-columns: repeat(3, 1fr); }
+    .upload-card { grid-template-columns: 1fr; }
+  }
+
+  @media (max-width: 768px) {
+    .header { padding: 0 16px; }
+    .page { padding: 16px; }
+    .overview-grid { grid-template-columns: repeat(2, 1fr); }
+    .controls { flex-direction: column; align-items: stretch; }
+    .search-wrap { width: 100%; }
+    .panel-toolbar { flex-direction: column; align-items: stretch; }
+    .panel-title { margin-right: 0; }
+    .brand-text p { display: none; }
+  }
+
+  @media (max-width: 480px) {
+    .overview-grid { grid-template-columns: 1fr 1fr; }
+    .header-actions .btn span { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<header class="header">
+  <div class="brand">
+    <div class="brand-icon">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/>
+      </svg>
+    </div>
+    <div class="brand-text">
+      <h1>Document Intelligence</h1>
+      <p>PDF classification &amp; field extraction</p>
+    </div>
+  </div>
+  <div class="header-actions">
+    <button class="btn btn-ghost" id="export-btn" onclick="exportResults()" style="display:none">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+      <span>Export JSON</span>
+    </button>
+  </div>
+</header>
+
+<div class="page">
+
+  <div class="controls">
+    <span class="controls-label">Dataset folder</span>
+    <div class="folder-input-wrap">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
+      <input type="text" id="folder-input" value="./dataset" placeholder="./dataset">
+    </div>
+    <button class="btn btn-primary" id="scan-btn" onclick="startScan()">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+      <span id="scan-btn-label">Scan Dataset</span>
+    </button>
+    <button class="btn" onclick="loadDataset()">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+      Reload
+    </button>
+  </div>
+
+  <div id="scan-err" class="alert alert-error"></div>
+
+  <div class="progress-panel" id="progress-panel">
+    <div class="progress-header">
+      <span class="progress-title">Processing documents…</span>
+      <span class="progress-count" id="progress-count">0 / 0</span>
+    </div>
+    <div class="progress-track"><div class="progress-fill" id="progress-fill"></div></div>
+    <div class="progress-file" id="progress-file">Starting…</div>
+  </div>
+
+  <div class="overview" id="overview">
+    <div class="overview-grid" id="stats-grid"></div>
+    <div class="distribution-bar">
+      <h3>Class distribution</h3>
+      <div class="bar-track" id="bar-track"></div>
+      <div class="bar-legend" id="bar-legend"></div>
+    </div>
+  </div>
+
+  <div class="panel" id="results-panel">
+    <div class="panel-toolbar" id="panel-toolbar" style="display:none">
+      <span class="panel-title" id="panel-title">Documents</span>
+      <div class="search-wrap">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input type="text" id="search-input" placeholder="Search files…" oninput="renderTable()">
+      </div>
+      <div class="filter-pills" id="filter-pills">
+        <button class="pill active" data-filter="all" onclick="setFilter(this,'all')">All</button>
+        <button class="pill" data-filter="Invoice" onclick="setFilter(this,'Invoice')">Invoices</button>
+        <button class="pill" data-filter="Resume" onclick="setFilter(this,'Resume')">Resumes</button>
+        <button class="pill" data-filter="Utility Bill" onclick="setFilter(this,'Utility Bill')">Utility Bills</button>
+        <button class="pill" data-filter="Other" onclick="setFilter(this,'Other')">Other</button>
+        <button class="pill" data-filter="Unclassifiable" onclick="setFilter(this,'Unclassifiable')">Unclassifiable</button>
+      </div>
+    </div>
+    <div id="content">
+      <div class="empty-state" id="empty-state">
+        <div class="empty-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+        </div>
+        <h2>No documents loaded</h2>
+        <p>Point to your dataset folder and scan, or drop a single PDF below to classify it instantly.</p>
+        <button class="btn btn-primary" onclick="loadDataset()">Load ./dataset</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="upload-section">
+    <div class="upload-card">
+      <div class="upload-info">
+        <h3>Quick classify</h3>
+        <p>Upload a single PDF to classify it and extract structured fields without scanning the full dataset.</p>
+        <ul>
+          <li>Invoice — number, company, date, total</li>
+          <li>Resume — name, email, phone, experience</li>
+          <li>Utility Bill — account, usage, amount due</li>
+        </ul>
+        <div id="classify-err" class="alert alert-error"></div>
+      </div>
+      <div class="upload-col">
+        <label class="dropzone" id="dropzone"
+          ondragover="onDragOver(event)" ondragleave="onDragLeave()" ondrop="onDrop(event)">
+          <input type="file" id="file-input" accept=".pdf" onchange="classifyFile(this.files[0])">
+          <div class="dropzone-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+          </div>
+          <p>Drop a PDF here or click to browse</p>
+          <span>Supports .pdf files only</span>
+        </label>
+        <div class="single-result" id="single-result"></div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+const CLASSES = ['Invoice', 'Resume', 'Utility Bill', 'Other', 'Unclassifiable'];
+
+const CLASS_META = {
+  'Invoice':        { badge: 'badge-invoice',        color: '#2563eb', accent: 'var(--invoice)' },
+  'Resume':         { badge: 'badge-resume',         color: '#059669', accent: 'var(--resume)' },
+  'Utility Bill':   { badge: 'badge-utility',        color: '#d97706', accent: 'var(--utility)' },
+  'Other':          { badge: 'badge-other',          color: '#64748b', accent: 'var(--other)' },
+  'Unclassifiable': { badge: 'badge-unclassifiable', color: '#dc2626', accent: 'var(--unclassifiable)' },
+};
+
+const FIELD_LABELS = {
+  'Invoice':        ['Invoice #', 'Company', 'Date', 'Total'],
+  'Resume':         ['Name', 'Email', 'Phone', 'Experience'],
+  'Utility Bill':   ['Account', 'Date', 'Usage', 'Amount Due'],
+};
+
+const DETAIL_FIELDS = {
+  'Invoice':        [['invoice_number','Invoice Number'],['company','Company'],['date','Date'],['total_amount','Total Amount']],
+  'Resume':         [['name','Name'],['email','Email'],['phone','Phone'],['experience_years','Experience (years)']],
+  'Utility Bill':   [['account_number','Account Number'],['date','Date'],['usage_kwh','Usage (kWh)'],['amount_due','Amount Due']],
+};
+
+let allResults = {};
+let currentFilter = 'all';
+let expandedRow = null;
+let pollTimer = null;
+let datasetInfo = null;
+
+function badge(cls) {
+  const m = CLASS_META[cls] || CLASS_META['Other'];
+  return `<span class="badge ${m.badge}"><span class="badge-dot"></span>${cls}</span>`;
+}
+
+function formatField(cls, key, val) {
+  if (val == null || val === '') return null;
+  if (key === 'invoice_number') return '#' + val;
+  if (key === 'total_amount' || key === 'amount_due') return '$' + Number(val).toLocaleString();
+  if (key === 'usage_kwh') return val + ' kWh';
+  if (key === 'experience_years') return val + (val === 1 ? ' year' : ' years');
+  return String(val);
+}
+
+function detailCols(cls, r) {
+  if (cls === 'Invoice')      return [formatField(cls,'invoice_number',r.invoice_number), formatField(cls,'company',r.company), formatField(cls,'date',r.date), formatField(cls,'total_amount',r.total_amount)];
+  if (cls === 'Resume')       return [formatField(cls,'name',r.name), formatField(cls,'email',r.email), formatField(cls,'phone',r.phone), formatField(cls,'experience_years',r.experience_years)];
+  if (cls === 'Utility Bill') return [formatField(cls,'account_number',r.account_number), formatField(cls,'date',r.date), formatField(cls,'usage_kwh',r.usage_kwh), formatField(cls,'amount_due',r.amount_due)];
+  return [null, null, null, null];
+}
+
+function renderCell(val) {
+  if (!val) return '<span class="field-value empty">—</span>';
+  return `<span class="field-value">${esc(val)}</span>`;
+}
+
+function esc(s) {
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function getCounts() {
+  const counts = {};
+  CLASSES.forEach(c => counts[c] = 0);
+  Object.values(allResults).forEach(v => { counts[v.class] = (counts[v.class] || 0) + 1; });
+  return counts;
+}
+
+function renderOverview() {
+  const total = Object.keys(allResults).length;
+  if (!total) {
+    document.getElementById('overview').classList.remove('visible');
+    document.getElementById('export-btn').style.display = 'none';
+    return;
+  }
+
+  const counts = getCounts();
+  document.getElementById('overview').classList.add('visible');
+  document.getElementById('export-btn').style.display = '';
+
+  const grid = document.getElementById('stats-grid');
+  grid.innerHTML = CLASSES.map(cls => {
+    const n = counts[cls] || 0;
+    const pct = total ? Math.round(n / total * 100) : 0;
+    const m = CLASS_META[cls];
+    const active = currentFilter === cls ? ' active' : '';
+    return `<div class="stat-card${active}" style="--card-accent:${m.color}" onclick="filterByCard('${cls}')">
+      <div class="count" style="color:${m.color}">${n}</div>
+      <div class="label">${cls}</div>
+      <div class="pct">${pct}% of dataset</div>
+    </div>`;
+  }).join('');
+
+  const barTrack = document.getElementById('bar-track');
+  const barLegend = document.getElementById('bar-legend');
+  barTrack.innerHTML = CLASSES.filter(c => counts[c]).map(cls => {
+    const pct = (counts[cls] / total * 100).toFixed(1);
+    return `<div class="bar-segment" style="width:${pct}%;background:${CLASS_META[cls].color}" title="${cls}: ${counts[cls]}"></div>`;
+  }).join('');
+
+  barLegend.innerHTML = CLASSES.filter(c => counts[c]).map(cls =>
+    `<div class="legend-item"><span class="legend-dot" style="background:${CLASS_META[cls].color}"></span>${cls} (${counts[cls]})</div>`
+  ).join('');
+}
+
+function filterByCard(cls) {
+  const pill = document.querySelector(`.pill[data-filter="${cls}"]`);
+  if (pill) setFilter(pill, cls);
+}
+
+function renderTable() {
+  const search = (document.getElementById('search-input')?.value || '').toLowerCase();
+  const entries = Object.entries(allResults).filter(([fname, v]) => {
+    if (currentFilter !== 'all' && v.class !== currentFilter) return false;
+    if (search && !fname.toLowerCase().includes(search)) return false;
+    return true;
+  });
+
+  const total = Object.keys(allResults).length;
+  const toolbar = document.getElementById('panel-toolbar');
+  const exportBtn = document.getElementById('export-btn');
+
+  if (!total) {
+    toolbar.style.display = 'none';
+    exportBtn.style.display = 'none';
+    document.getElementById('content').innerHTML = document.getElementById('empty-state').outerHTML;
+    document.getElementById('overview').classList.remove('visible');
+    return;
+  }
+
+  toolbar.style.display = 'flex';
+  exportBtn.style.display = '';
+  document.getElementById('panel-title').textContent =
+    `Documents (${entries.length}${entries.length !== total ? ' of ' + total : ''})`;
+
+  if (!entries.length) {
+    document.getElementById('content').innerHTML = `
+      <div class="empty-state">
+        <div class="empty-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></div>
+        <h2>No matches</h2>
+        <p>Try adjusting your search or filter.</p>
+      </div>`;
+    return;
+  }
+
+  const showCols = currentFilter !== 'all' && FIELD_LABELS[currentFilter];
+  const headers = showCols
+    ? ['File', 'Class', ...FIELD_LABELS[currentFilter], '']
+    : ['File', 'Class', 'Primary Field', 'Secondary Field', ''];
+
+  const rows = entries.map(([fname, rec]) => {
+    const cls = rec.class || 'Unclassifiable';
+    const [c1, c2, c3, c4] = detailCols(cls, rec);
+    const isExpanded = expandedRow === fname;
+    const fields = DETAIL_FIELDS[cls];
+    const detailHtml = fields ? fields.map(([key, label]) => {
+      const val = formatField(cls, key, rec[key]);
+      return `<div class="detail-item"><label>${label}</label><span>${val ? esc(val) : '—'}</span></div>`;
+    }).join('') : `<div class="detail-item"><label>Classification</label><span>${esc(cls)} only — no additional fields extracted</span></div>`;
+
+    const dataCells = showCols
+      ? [c1, c2, c3, c4].map(renderCell).join('')
+      : `${renderCell(c1)}${renderCell(c2)}`;
+
+    return `<tr class="${isExpanded ? 'expanded' : ''}" data-fname="${esc(fname)}" onclick="toggleRow(this.dataset.fname)">
+      <td><div class="file-cell">
+        <div class="file-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div>
+        <span class="file-name">${esc(fname)}</span>
+      </div></td>
+      <td>${badge(cls)}</td>
+      ${dataCells}
+      <td><svg class="expand-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></td>
+    </tr>
+    ${isExpanded ? `<tr class="detail-row"><td colspan="${headers.length}"><div class="detail-content">${detailHtml}</div></td></tr>` : ''}`;
+  }).join('');
+
+  document.getElementById('content').innerHTML = `
+    <div class="table-container">
+      <table>
+        <thead><tr>${headers.map(h => `<th>${h}</th>`).join('')}</tr></thead>
+        <tbody>${rows}</tbody>
+      </table>
+    </div>`;
+
+  renderOverview();
+}
+
+function toggleRow(fname) {
+  expandedRow = expandedRow === fname ? null : fname;
+  renderTable();
+}
+
+function setFilter(btn, f) {
+  currentFilter = f;
+  expandedRow = null;
+  document.querySelectorAll('.pill').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('.stat-card').forEach((c, i) => {
+    c.classList.toggle('active', f !== 'all' && CLASSES[i] === f);
+  });
+  if (f === 'all') document.querySelectorAll('.stat-card').forEach(c => c.classList.remove('active'));
+  renderTable();
+}
+
+async function loadDataset() {
+  const folder = document.getElementById('folder-input').value.trim() || './dataset';
+  const errEl = document.getElementById('scan-err');
+  errEl.classList.remove('visible');
+
+  try {
+    const res = await fetch(`/api/dataset?folder=${encodeURIComponent(folder)}`);
+    const data = await res.json();
+    if (!res.ok) {
+      errEl.textContent = data.error || 'Failed to load dataset';
+      errEl.classList.add('visible');
+      return;
+    }
+    datasetInfo = data;
+    if (data.has_results && data.results) {
+      allResults = data.results;
+      currentFilter = 'all';
+      expandedRow = null;
+      document.querySelectorAll('.pill').forEach(b => b.classList.toggle('active', b.dataset.filter === 'all'));
+      renderTable();
+    } else if (data.pdf_count > 0) {
+      document.getElementById('content').innerHTML = `
+        <div class="empty-state">
+          <div class="empty-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg></div>
+          <h2>${data.pdf_count} PDFs found</h2>
+          <p>Found ${data.pdf_count} documents in <strong>${esc(folder)}</strong> but no processed results yet. Click Scan Dataset to classify them.</p>
+          <button class="btn btn-primary" onclick="startScan()">Scan Dataset</button>
+        </div>`;
+    }
+  } catch (e) {
+    errEl.textContent = 'Could not connect to server.';
+    errEl.classList.add('visible');
+  }
+}
+
+async function startScan() {
+  const folder = document.getElementById('folder-input').value.trim() || './dataset';
+  const btn = document.getElementById('scan-btn');
+  const errEl = document.getElementById('scan-err');
+  errEl.classList.remove('visible');
+  btn.disabled = true;
+  document.getElementById('scan-btn-label').textContent = 'Starting…';
+
+  const res = await fetch('/api/process', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ folder }),
+  });
+  const data = await res.json();
+
+  if (!res.ok) {
+    errEl.textContent = data.error || 'Scan failed';
+    errEl.classList.add('visible');
+    btn.disabled = false;
+    document.getElementById('scan-btn-label').textContent = 'Scan Dataset';
+    return;
+  }
+
+  document.getElementById('progress-panel').classList.add('active');
+  pollTimer = setInterval(pollStatus, 350);
+}
+
+async function pollStatus() {
+  const s = await fetch('/api/status').then(r => r.json());
+  const pct = s.total > 0 ? Math.round(s.done / s.total * 100) : 0;
+  document.getElementById('progress-fill').style.width = pct + '%';
+  document.getElementById('progress-count').textContent = `${s.done} / ${s.total}`;
+  document.getElementById('progress-file').textContent =
+    s.running ? s.current : `Completed — ${s.total} documents processed`;
+
+  if (!s.running) {
+    clearInterval(pollTimer);
+    document.getElementById('scan-btn').disabled = false;
+    document.getElementById('scan-btn-label').textContent = 'Scan Dataset';
+    setTimeout(() => document.getElementById('progress-panel').classList.remove('active'), 2000);
+    if (s.results) {
+      allResults = s.results;
+      currentFilter = 'all';
+      expandedRow = null;
+      document.querySelectorAll('.pill').forEach(b => b.classList.toggle('active', b.dataset.filter === 'all'));
+      renderTable();
+    }
+    if (s.error) {
+      const errEl = document.getElementById('scan-err');
+      errEl.textContent = s.error;
+      errEl.classList.add('visible');
+    }
+  }
+}
+
+async function classifyFile(file) {
+  if (!file) return;
+  const errEl = document.getElementById('classify-err');
+  const resEl = document.getElementById('single-result');
+  const fileInput = document.getElementById('file-input');
+  errEl.classList.remove('visible');
+  resEl.classList.add('visible');
+  resEl.innerHTML = '<div class="classifying"><span class="spinner"></span> Classifying document…</div>';
+
+  try {
+    const fd = new FormData();
+    fd.append('file', file);
+    const r = await fetch('/api/classify', { method: 'POST', body: fd });
+    const data = await r.json();
+
+    if (!r.ok) {
+      errEl.textContent = data.error || 'Classification failed';
+      errEl.classList.add('visible');
+      resEl.classList.remove('visible');
+      return;
+    }
+
+    const cls = data.class || 'Unclassifiable';
+    const fields = DETAIL_FIELDS[cls];
+    const bodyHtml = fields
+      ? fields.map(([key, label]) => {
+          const val = formatField(cls, key, data[key]);
+          return `<div class="detail-item"><label>${label}</label><span>${val ? esc(val) : '—'}</span></div>`;
+        }).join('')
+      : `<div class="detail-item"><label>Result</label><span>Classified as ${esc(cls)}</span></div>`;
+
+    resEl.innerHTML = `
+      <div class="single-result-header">
+        <span class="fname">${esc(data.filename)}</span>
+        ${badge(cls)}
+      </div>
+      <div class="single-result-body">${bodyHtml}</div>`;
+  } finally {
+    fileInput.value = '';
+  }
+}
+
+function exportResults() {
+  if (!Object.keys(allResults).length) return;
+  const blob = new Blob([JSON.stringify(allResults, null, 2)], { type: 'application/json' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'output.json';
+  a.click();
+  URL.revokeObjectURL(a.href);
+}
+
+function onDragOver(e) { e.preventDefault(); document.getElementById('dropzone').classList.add('drag-over'); }
+function onDragLeave() { document.getElementById('dropzone').classList.remove('drag-over'); }
+function onDrop(e) {
+  e.preventDefault();
+  onDragLeave();
+  const f = e.dataTransfer.files[0];
+  if (f) classifyFile(f);
+}
+
+loadDataset();
+</script>
+</body>
+</html>

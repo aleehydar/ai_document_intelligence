@@ -1,0 +1,7 @@
+pypdf>=4.0
+pdfminer.six>=20221105
+sentence-transformers>=3.0
+faiss-cpu>=1.8
+scikit-learn>=1.4
+numpy>=1.26
+flask>=3.0
